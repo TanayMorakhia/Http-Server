@@ -34,7 +34,7 @@ public class Main {
 
 			System.out.println("Msg received from client " + requestString);
 
-			Matcher m = Pattern.compile("/\\S+").matcher(requestString);
+			Matcher m = Pattern.compile("/\\S*").matcher(requestString);
 			
 			if(m.find()){
 				path = m.group();
