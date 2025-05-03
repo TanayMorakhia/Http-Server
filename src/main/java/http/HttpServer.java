@@ -6,9 +6,11 @@ import java.net.Socket;
 
 public class HttpServer {
     private final int port;
-    
-    public HttpServer(int port){
+    private final String dir;
+
+    public HttpServer(int port, String dir){
         this.port = port;
+        this.dir = dir;
     }
 
     public void start(){
@@ -26,7 +28,7 @@ public class HttpServer {
                 Socket clientSocket = serverSocket.accept(); // Wait for connection from client.
                 System.out.println("accepted new connection");
 
-                RequestHandler handler = new RequestHandler(clientSocket);
+                RequestHandler handler = new RequestHandler(clientSocket, dir);
 
                 new Thread(handler::handle).start();;
             }

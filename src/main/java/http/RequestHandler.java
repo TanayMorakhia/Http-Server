@@ -6,16 +6,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.channels.FileChannel;
-import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
 public class RequestHandler {
     
     private final Socket clientSocket;
+    private final String dir;
 
-    public RequestHandler(Socket clientSocket){
+    public RequestHandler(Socket clientSocket, String dir){
         this.clientSocket = clientSocket;
+        this.dir = dir;
     }
 
     public void handle(){
@@ -47,7 +47,7 @@ public class RequestHandler {
                                     + "\r\n\r\n" + userAgent;
             }else if(requestString.split(" ")[1].startsWith("/file")){
                 String fileName = requestString.split(" ")[1].split("/")[2];
-                File file = new File(requestString.split(" ")[1], fileName);
+                File file = new File(dir, fileName);
                 if(file.exists() && file.isFile()){
 
                     // try (FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
