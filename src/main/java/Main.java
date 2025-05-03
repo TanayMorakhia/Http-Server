@@ -36,6 +36,8 @@ public class Main {
 
 			if (requestString != null && requestString.split(" ")[1].equals("/")) {
 				responseString = "HTTP/1.1 200 OK\r\n\r\n";
+			}else if(requestString.split(" ")[1].equals("/echo/abc")){
+				responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length : 3\r\n\r\nabc"
 			}else {
 				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
 			}
