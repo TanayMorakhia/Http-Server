@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 	public static void main(String[] args) {
@@ -26,13 +28,25 @@ public class Main {
 
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-			String requestString, responseString;
+			String requestString, responseString, path;
 
 			requestString = in.readLine();
 
 			System.out.println("Msg received from client " + requestString);
 
-			responseString = "HTTP/1.1 200 OK\r\n\r\n";
+			Matcher m = Pattern.compile("/\\S+").matcher(requestString);
+			
+			if(m.find()){
+				path = m.group();
+			}else{
+				path = "";
+			}
+
+			if(path == "/"){
+				responseString = "HTTP/1.1 200 OK\r\n\r\n";
+			}else{
+				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
+			}
 
 			out.println(responseString);
 
