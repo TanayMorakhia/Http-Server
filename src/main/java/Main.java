@@ -18,8 +18,8 @@ public class Main {
             System.out.println("No directory specified, using default directory.");
             directory = ".";
         }
-		
-		HttpServer server = new HttpServer(4221);
+
+		HttpServer server = new HttpServer(4221, directory);
 		server.start();
 	}
 }
