@@ -5,55 +5,13 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import http.HttpServer;
+
 public class Main {
 	public static void main(String[] args) {
 		// You can use print statements as follows for debugging, they'll be visible when running tests.
 		System.out.println("Logs from your program will appear here!");
-
-		// Uncomment this block to pass the first stage
-
-		try {
-			ServerSocket serverSocket = new ServerSocket(4221);
-
-			// Since the tester restarts your program quite often, setting SO_REUSEADDR
-			// ensures that we don't run into 'Address already in use' errors
-			serverSocket.setReuseAddress(true);
-
-			Socket clientSocket = serverSocket.accept(); // Wait for connection from client.
-			System.out.println("accepted new connection");
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-			String requestString, responseString;
-
-			requestString = in.readLine();
-
-			System.out.println("Msg received from client " + requestString);
-
-			if (requestString != null && requestString.split(" ")[1].equals("/")) {
-				responseString = "HTTP/1.1 200 OK\r\n\r\n";
-			}else if(requestString.split(" ")[1].split("/")[1].equals("echo")){
-				responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
-									+ requestString.split(" ")[1].split("/")[2].length() 
-									+ "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
-			}else if(requestString.split(" ")[1].equals("/user-agent")){
-				in.readLine();
-				String userAgent = in.readLine().split(" ")[1];
-
-				responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
-									+ userAgent.length()
-									+ "\r\n\r\n" + userAgent;
-			}else {
-				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
-			}
-
-			out.println(responseString);
-
-			System.out.println("Response message sent to client");
-		} catch (IOException e) {
-			System.out.println("IOException: " + e.getMessage());
-		}
+		System.out.println("Starting http server....");
+		HttpServer http = new HttpServer(4221);
 	}
 }
