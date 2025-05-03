@@ -38,6 +38,12 @@ public class Main {
 				responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
 									+ requestString.split(" ")[1].split("/")[2].length() 
 									+ "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
+			}else if(requestString.split(" ")[1].equals("/user-agent")){
+				String userAgent = requestString.split("\r\n")[2];
+
+				responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
+				+ userAgent.length()
+				+ "\r\n\r\n" + userAgent;
 			}else {
 				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
 			}
