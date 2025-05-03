@@ -28,7 +28,7 @@ public class HttpServer {
 
                 RequestHandler handler = new RequestHandler(clientSocket);
 
-                new Thread(handler::handle);
+                new Thread(handler::handle).start();;
             }
 
 			
