@@ -47,7 +47,7 @@ public class RequestHandler {
                                     + "\r\n\r\n" + userAgent;
             }else if(requestString.split(" ")[1].startsWith("/file")){
                 String fileName = requestString.split(" ")[1].split("/")[2];
-                File file = new File("/tmp/" + fileName);
+                File file = new File(requestString.split(" ")[1], fileName);
                 if(file.exists() && file.isFile()){
 
                     // try (FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
@@ -62,6 +62,8 @@ public class RequestHandler {
                     }
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" 
                                         + file.length() + "\r\n\r\n" + content;
+
+                    sc.close();
                 }else{
                     responseString = ResponseText.STATUS_404;
                 }
