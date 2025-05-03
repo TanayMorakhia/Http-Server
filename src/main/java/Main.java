@@ -34,7 +34,7 @@ public class Main {
 
 			System.out.println("Msg received from client " + requestString);
 
-			Matcher m = Pattern.compile("\/[^\s]*").matcher(requestString);
+			Matcher m = Pattern.compile("GET\\s(\\/\\w*|\\/)\\sHTTP\\/1\\.1").matcher(requestString);
 			
 			if(m.find()){
 				path = m.group();
