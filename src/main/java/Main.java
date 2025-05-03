@@ -34,18 +34,9 @@ public class Main {
 
 			System.out.println("Msg received from client " + requestString);
 
-			Matcher m = Pattern.compile("GET\\s(\\/\\w*|\\/)\\sHTTP\\/1\\.1").matcher(requestString);
-			
-			if(m.find()){
-				path = m.group();
-				System.out.println(path);
-			}else{
-				path = "";
-			}
-
-			if(path.equals("/")){
+			if (requestString != null && requestString.split(" ")[1].equals("/")) {
 				responseString = "HTTP/1.1 200 OK\r\n\r\n";
-			}else{
+			}else {
 				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
 			}
 
