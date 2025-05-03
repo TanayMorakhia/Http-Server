@@ -38,11 +38,12 @@ public class Main {
 			
 			if(m.find()){
 				path = m.group();
+				System.out.println(path);
 			}else{
 				path = "";
 			}
 
-			if(path == "/"){
+			if(path.equals("/")){
 				responseString = "HTTP/1.1 200 OK\r\n\r\n";
 			}else{
 				responseString = "HTTP/1.1 404 Not Found\r\n\r\n";
