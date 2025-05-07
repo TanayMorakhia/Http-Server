@@ -46,26 +46,49 @@ public class RequestHandler {
                                     + userAgent.length()
                                     + "\r\n\r\n" + userAgent;
             }else if(requestString.split(" ")[1].startsWith("/file")){
-                String fileName = requestString.split(" ")[1].split("/")[2];
-                File file = new File(dir, fileName);
-                if(file.exists() && file.isFile()){
-
-                    // try (FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
-                    //     // get the size of the file
-                    //     long fileSize = channel.size();    
-                    // }
-                    Scanner sc = new Scanner(file);
-
-                    String content = "";
-                    while(sc.hasNextLine()){
-                        content += sc.nextLine();
+                if(requestString.split(" ")[0].equals("GET")){
+                    String fileName = requestString.split(" ")[1].split("/")[2];
+                    File file = new File(dir, fileName);
+                    if(file.exists() && file.isFile()){
+    
+                        // try (FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
+                        //     // get the size of the file
+                        //     long fileSize = channel.size();    
+                        // }
+                        Scanner sc = new Scanner(file);
+    
+                        String content = "";
+                        while(sc.hasNextLine()){
+                            content += sc.nextLine();
+                        }
+                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" 
+                                            + file.length() + "\r\n\r\n" + content;
+    
+                        sc.close();
+                    }else{
+                        responseString = ResponseText.STATUS_404;
                     }
-                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" 
-                                        + file.length() + "\r\n\r\n" + content;
-
-                    sc.close();
                 }else{
-                    responseString = ResponseText.STATUS_404;
+                    String fileName = requestString.split(" ")[1].split("/")[2];
+                    in.readLine();
+                    in.readLine();
+                    in.readLine();
+                    in.readLine();
+                    int length = Integer.parseInt(in.readLine().split(" ")[1]);
+
+                    String body = in.readLine();
+
+                    File file = new File(dir + fileName);
+
+                    if(!file.exists()){
+                        file.createNewFile();
+                    }
+
+                    PrintWriter write = new PrintWriter(file);
+                    write.println(body);
+                    write.close();
+
+                    responseString = ResponseText.STATUS_201;
                 }
             }else {
                 responseString = ResponseText.STATUS_404;
