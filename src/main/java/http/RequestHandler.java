@@ -74,7 +74,7 @@ public class RequestHandler {
                     in.readLine();
                     in.readLine();
                     in.readLine();
-                    int length = Integer.parseInt(in.readLine().split(" ")[1]);
+                    //int length = Integer.parseInt(in.readLine().split(" ")[1]);
 
                     String body = in.readLine();
 
