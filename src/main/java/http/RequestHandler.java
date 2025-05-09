@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class RequestHandler {
@@ -74,9 +75,16 @@ public class RequestHandler {
                     in.readLine();
                     in.readLine();
                     in.readLine();
-                    //int length = Integer.parseInt(in.readLine().split(" ")[1]);
+                    int length = Integer.parseInt(in.readLine().split(" ")[1]);
+                    System.out.println(length);
+                    //in.readLine();
+                    in.readLine();
 
-                    String body = in.readLine();
+                    // needed for read function
+                    char[] temp = new char[length];
+                
+                    in.read(temp, 0, length);
+                    System.out.println(String.valueOf(temp));
 
                     File file = new File(dir + fileName);
 
@@ -85,10 +93,11 @@ public class RequestHandler {
                     }
 
                     PrintWriter write = new PrintWriter(file);
-                    write.println(body);
-                    write.close();
-
+                    write.println(String.valueOf(temp));
+                
                     responseString = ResponseText.STATUS_201;
+
+                    write.close();
                 }
             }else {
                 responseString = ResponseText.STATUS_404;
