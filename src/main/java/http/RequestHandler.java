@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class RequestHandler {
@@ -70,20 +71,36 @@ public class RequestHandler {
                         responseString = ResponseText.STATUS_404;
                     }
                 }else{
+
+                    HashMap<String, String> req = new HashMap<>();
                     String fileName = requestString.split(" ")[1].split("/")[2];
-                    in.readLine();
-                    in.readLine();
-                    in.readLine();
-                    in.readLine();
-                    int length = Integer.parseInt(in.readLine().split(" ")[1]);
-                    System.out.println(length);
+
+                    String temp;
+
+                    temp = in.readLine();
+                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+
+                    temp = in.readLine();
+                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    
+                    temp = in.readLine();
+                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    
+                    temp = in.readLine();
+                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    
+                    temp = in.readLine();
+                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                
                     //in.readLine();
                     in.readLine();
 
+                    int length = Integer.parseInt(req.get("Content-Length:"));
+
                     // needed for read function
-                    char[] temp = new char[length];
+                    char[] tempBuff = new char[length];
                 
-                    in.read(temp, 0, length);
+                    in.read(tempBuff, 0, length);
                     System.out.println(String.valueOf(temp));
 
                     File file = new File(dir + fileName);
@@ -93,7 +110,7 @@ public class RequestHandler {
                     }
 
                     PrintWriter write = new PrintWriter(file);
-                    write.println(String.valueOf(temp));
+                    write.println(String.valueOf(String.valueOf(tempBuff)));
                 
                     responseString = ResponseText.STATUS_201;
 
