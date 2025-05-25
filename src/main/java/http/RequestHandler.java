@@ -36,9 +36,30 @@ public class RequestHandler {
             if (requestString != null && requestString.split(" ")[1].equals("/")) {
                 responseString = ResponseText.STATUS_OK;
             }else if(requestString.split(" ")[1].split("/")[1].equals("echo")){
+
+                if(requestString.split(" ").length > 2){
+                    HashMap<String, String> reqHeaders = new HashMap<>();
+
+                    String temp;
+
+                    temp = in.readLine();
+
+                    while(!temp.equals("")){
+                        reqHeaders.put(temp.split(" ")[0], temp.split(" ")[1]);
+                        temp = in.readLine();
+                    }
+
+                    if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").equals("gzip")){
+                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding : "
+                         + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
+                    }else{
+                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n";
+                    }
+                }else{
                 responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + requestString.split(" ")[1].split("/")[2].length() 
                                     + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
+                }
             }else if(requestString.split(" ")[1].equals("/user-agent")){
                 in.readLine();  
                 String userAgent = in.readLine().split(" ")[1];
@@ -77,28 +98,11 @@ public class RequestHandler {
                     String temp;
 
                     temp = in.readLine();
-                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
-
-                    // temp = in.readLine();
-                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
-                    
-                    // temp = in.readLine();
-                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
-                    
-                    // temp = in.readLine();
-                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
-                    
-                    // temp = in.readLine();
-                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
 
                     while(!temp.equals("")){
                         req.put(temp.split(" ")[0], temp.split(" ")[1]);
                         temp = in.readLine();
                     }
-
-                
-                    //in.readLine();
-                    //in.readLine();
 
                     int length = Integer.parseInt(req.get("Content-Length:"));
 
