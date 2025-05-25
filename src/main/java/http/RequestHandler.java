@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class RequestHandler {
@@ -78,22 +77,28 @@ public class RequestHandler {
                     String temp;
 
                     temp = in.readLine();
-                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
 
-                    temp = in.readLine();
-                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    // temp = in.readLine();
+                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
                     
-                    temp = in.readLine();
-                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    // temp = in.readLine();
+                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
                     
-                    temp = in.readLine();
-                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    // temp = in.readLine();
+                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
                     
-                    temp = in.readLine();
-                    req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    // temp = in.readLine();
+                    // req.put(temp.split(" ")[0], temp.split(" ")[1]);
+
+                    while(!temp.equals("")){
+                        req.put(temp.split(" ")[0], temp.split(" ")[1]);
+                        temp = in.readLine();
+                    }
+
                 
                     //in.readLine();
-                    in.readLine();
+                    //in.readLine();
 
                     int length = Integer.parseInt(req.get("Content-Length:"));
 
