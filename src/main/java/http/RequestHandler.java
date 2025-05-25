@@ -115,7 +115,7 @@ public class RequestHandler {
                     }
 
                     PrintWriter write = new PrintWriter(file);
-                    write.println(String.valueOf(String.valueOf(tempBuff)));
+                    write.print(String.valueOf(String.valueOf(tempBuff)));
                 
                     responseString = ResponseText.STATUS_201;
 
