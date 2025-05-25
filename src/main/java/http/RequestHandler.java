@@ -49,7 +49,7 @@ public class RequestHandler {
                     temp = in.readLine();
                 }
 
-                if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").contains("gzip") || reqHeaders.get("Accept-Encoding:").contains("gzip,")){
+                if(reqHeaders.containsKey("Accept-Encoding:") && (reqHeaders.get("Accept-Encoding:").contains("gzip") || reqHeaders.get("Accept-Encoding:").contains("gzip,"))){
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: "
                         + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
                 }else{
