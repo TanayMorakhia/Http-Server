@@ -37,26 +37,23 @@ public class RequestHandler {
                 responseString = ResponseText.STATUS_OK;
             }else if(requestString.split(" ")[1].split("/")[1].equals("echo")){
 
-                if(requestString.split(" ").length > 2){
-                    HashMap<String, String> reqHeaders = new HashMap<>();
+                
+                HashMap<String, String> reqHeaders = new HashMap<>();
 
-                    String temp;
+                String temp;
 
+                temp = in.readLine();
+
+                while(!temp.equals("")){
+                    reqHeaders.put(temp.split(" ")[0], temp.split(" ")[1]);
                     temp = in.readLine();
+                }
 
-                    while(!temp.equals("")){
-                        reqHeaders.put(temp.split(" ")[0], temp.split(" ")[1]);
-                        temp = in.readLine();
-                    }
-
-                    if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").equals("gzip")){
-                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: "
-                         + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
-                    }else{
-                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n";
-                    }
+                if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").equals("gzip")){
+                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: "
+                        + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
                 }else{
-                responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
+                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + requestString.split(" ")[1].split("/")[2].length() 
                                     + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
                 }
