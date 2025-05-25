@@ -45,13 +45,12 @@ public class RequestHandler {
                 temp = in.readLine();
 
                 while(!temp.equals("")){
-                    reqHeaders.put(temp.split(" ")[0], temp.split(" ")[1]);
+                    reqHeaders.put(temp.split(" ")[0], temp.split(" ", 2)[1]);
                     temp = in.readLine();
                 }
 
-                if(reqHeaders.containsKey("Accept-Encoding:") && (reqHeaders.get("Accept-Encoding:").contains("gzip") || reqHeaders.get("Accept-Encoding:").contains("gzip,"))){
-                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: "
-                        + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
+                if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").contains("gzip")){
+                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip" + "\r\n\r\n";
                 }else{
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + requestString.split(" ")[1].split("/")[2].length() 
