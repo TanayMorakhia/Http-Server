@@ -50,7 +50,7 @@ public class RequestHandler {
                     }
 
                     if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").equals("gzip")){
-                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding : "
+                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: "
                          + reqHeaders.get("Accept-Encoding:") + "\r\n\r\n";
                     }else{
                         responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n";
