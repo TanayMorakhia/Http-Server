@@ -36,23 +36,23 @@ public class RequestHandler {
             requestString = in.readLine();
             byte[] compressedData = null;
 
+
             System.out.println("Msg received from client " + requestString);
+
+            HashMap<String, String> reqHeaders = new HashMap<>();
+
+            String temp;
+
+            temp = in.readLine();
+
+            while(!temp.equals("")){
+                reqHeaders.put(temp.split(" ")[0], temp.split(" ", 2)[1]);
+                temp = in.readLine();
+            }
 
             if (requestString != null && requestString.split(" ")[1].equals("/")) {
                 responseString = ResponseText.STATUS_OK;
             }else if(requestString.split(" ")[1].split("/")[1].equals("echo")){
-
-                
-                HashMap<String, String> reqHeaders = new HashMap<>();
-
-                String temp;
-
-                temp = in.readLine();
-
-                while(!temp.equals("")){
-                    reqHeaders.put(temp.split(" ")[0], temp.split(" ", 2)[1]);
-                    temp = in.readLine();
-                }
 
                 if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").contains("gzip")){
                     GzipCompressor gzipCompressor = new GzipCompressor();
@@ -70,9 +70,7 @@ public class RequestHandler {
                                     + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
                 }
             }else if(requestString.split(" ")[1].equals("/user-agent")){
-                in.readLine();  
-                String userAgent = in.readLine().split(" ")[1];
-
+                String userAgent = reqHeaders.get("User-Age:");
                 responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + userAgent.length()
                                     + "\r\n\r\n" + userAgent;
@@ -101,19 +99,9 @@ public class RequestHandler {
                     }
                 }else{
 
-                    HashMap<String, String> req = new HashMap<>();
                     String fileName = requestString.split(" ")[1].split("/")[2];
 
-                    String temp;
-
-                    temp = in.readLine();
-
-                    while(!temp.equals("")){
-                        req.put(temp.split(" ")[0], temp.split(" ")[1]);
-                        temp = in.readLine();
-                    }
-
-                    int length = Integer.parseInt(req.get("Content-Length:"));
+                    int length = Integer.parseInt(reqHeaders.get("Content-Length:"));
 
                     // needed for read function
                     char[] tempBuff = new char[length];
