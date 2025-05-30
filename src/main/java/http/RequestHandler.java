@@ -50,7 +50,15 @@ public class RequestHandler {
                 }
 
                 if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").contains("gzip")){
-                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip" + "\r\n\r\n";
+                    GzipCompressor gzipCompressor = new GzipCompressor();
+                    String data = requestString.split(" ")[1].split("/")[2];
+
+                    byte[] uncompressedData = data.getBytes();
+
+                    byte[] compressedData = gzipCompressor.gzipCompression(uncompressedData);
+                    
+                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: " +
+                                            compressedData.length + "\r\n\r\n" + compressedData;
                 }else{
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + requestString.split(" ")[1].split("/")[2].length() 
