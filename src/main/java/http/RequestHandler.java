@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -25,7 +27,9 @@ public class RequestHandler {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            //PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            
+            OutputStream out = clientSocket.getOutputStream();
 
             String requestString, responseString;
 
@@ -134,10 +138,10 @@ public class RequestHandler {
                 responseString = ResponseText.STATUS_404;
             }
 
-            out.print(responseString + compressedData);
+            out.write(responseString.getBytes(StandardCharsets.UTF_8));
             try{
                 if(compressedData.length != 0){
-                    out.print(compressedData);
+                    out.write(compressedData);
                 }
             }catch(NullPointerException e){
                 
