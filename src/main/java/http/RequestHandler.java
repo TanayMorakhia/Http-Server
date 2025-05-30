@@ -70,7 +70,7 @@ public class RequestHandler {
                                     + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
                 }
             }else if(requestString.split(" ")[1].equals("/user-agent")){
-                String userAgent = reqHeaders.get("User-Age:");
+                String userAgent = reqHeaders.get("User-Agent:");
                 responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + userAgent.length()
                                     + "\r\n\r\n" + userAgent;
