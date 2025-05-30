@@ -30,6 +30,7 @@ public class RequestHandler {
             String requestString, responseString;
 
             requestString = in.readLine();
+            byte[] compressedData = null;
 
             System.out.println("Msg received from client " + requestString);
 
@@ -55,10 +56,10 @@ public class RequestHandler {
 
                     byte[] uncompressedData = data.getBytes();
 
-                    byte[] compressedData = gzipCompressor.gzipCompression(uncompressedData);
+                    compressedData = gzipCompressor.gzipCompression(uncompressedData);
                     
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: " +
-                                            compressedData.length + "\r\n\r\n" + compressedData;
+                                            compressedData.length + "\r\n\r\n";
                 }else{
                     responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
                                     + requestString.split(" ")[1].split("/")[2].length() 
@@ -133,7 +134,14 @@ public class RequestHandler {
                 responseString = ResponseText.STATUS_404;
             }
 
-            out.println(responseString);
+            out.print(responseString);
+            try{
+                if(compressedData.length != 0){
+                    out.print(compressedData);
+                }
+            }catch(NullPointerException e){
+                
+            }
             System.out.println("Response message sent to client");
 
         }catch(IOException e){
