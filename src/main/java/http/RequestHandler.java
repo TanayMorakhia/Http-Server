@@ -134,7 +134,7 @@ public class RequestHandler {
                 responseString = ResponseText.STATUS_404;
             }
 
-            out.print(responseString);
+            out.print(responseString + compressedData);
             try{
                 if(compressedData.length != 0){
                     out.print(compressedData);
