@@ -138,9 +138,14 @@ public class RequestHandler {
                 }
                 System.out.println("Response message sent to client");
 
-                if(reqHeaders.get("Connection:").equalsIgnoreCase("close")){
-                    break;
+                try{
+                    if(reqHeaders.get("Connection:").equalsIgnoreCase("close")){
+                        break;
+                    }
+                }catch(NullPointerException e){
+                    
                 }
+
             }
 
         }catch(IOException e){
