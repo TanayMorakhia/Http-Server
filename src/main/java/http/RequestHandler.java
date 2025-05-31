@@ -137,6 +137,10 @@ public class RequestHandler {
                     
                 }
                 System.out.println("Response message sent to client");
+
+                if(reqHeaders.get("Connection:").equalsIgnoreCase("close")){
+                    break;
+                }
             }
 
         }catch(IOException e){
