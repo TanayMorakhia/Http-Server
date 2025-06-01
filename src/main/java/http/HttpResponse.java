@@ -31,7 +31,7 @@ public class HttpResponse{
             //adding headers to the main response
             sb.append(headers);
         }catch(NullPointerException e){
-
+            sb.append("\r\n");
         }
 
         try{
