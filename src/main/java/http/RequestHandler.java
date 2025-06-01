@@ -206,6 +206,7 @@ public class RequestHandler {
 
             }
 
+            out.flush();
         }catch(IOException e){
             System.out.println(e.getMessage());
         }
