@@ -30,7 +30,7 @@ public class HttpServer {
 
                 RequestHandler handler = new RequestHandler(clientSocket, dir);
 
-                new Thread(handler::handle).start();;
+                new Thread(handler::handle).start();
             }
 
 			

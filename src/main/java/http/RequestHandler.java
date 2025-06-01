@@ -36,8 +36,16 @@ public class RequestHandler {
                 String requestString, responseString;
 
                 requestString = in.readLine();
-                byte[] compressedData = null;
 
+                if(requestString.split(" ").length < 2){
+                    break;
+                }
+
+                String method = requestString.split(" ")[0];
+                String path = requestString.split(" ")[1];
+
+
+                byte[] compressedData = null;
 
                 System.out.println("Msg received from client " + requestString);
 
@@ -47,14 +55,18 @@ public class RequestHandler {
 
                 temp = in.readLine();
 
+                //getting headers
                 while(!temp.equals("")){
                     reqHeaders.put(temp.split(" ")[0], temp.split(" ", 2)[1]);
                     temp = in.readLine();
                 }
 
-                if (requestString != null && requestString.split(" ")[1].equals("/")) {
-                    responseString = ResponseText.STATUS_OK;
-                }else if(requestString.split(" ")[1].split("/")[1].equals("echo")){
+
+                if (path.equals("/")) {
+                    responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                            .build()
+                                            .getResponse();
+                }else if(path.split("/")[1].equals("echo")){
 
                     if(reqHeaders.containsKey("Accept-Encoding:") && reqHeaders.get("Accept-Encoding:").contains("gzip")){
                         GzipCompressor gzipCompressor = new GzipCompressor();
@@ -63,22 +75,45 @@ public class RequestHandler {
                         byte[] uncompressedData = data.getBytes();
 
                         compressedData = gzipCompressor.gzipCompression(uncompressedData);
+                        reqHeaders.put("Content-Type:", "text/plain");
+                        reqHeaders.put("Content-Length:", String.valueOf(compressedData.length));
+                        reqHeaders.put("Content-Encoding:", "gzip");
+                        reqHeaders.remove("Accept-Encoding:");
                         
-                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: " +
-                                                compressedData.length + "\r\n\r\n";
+                        responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                            .setReqHashMap(reqHeaders)
+                                            .build().getResponse();
                     }else{
-                        responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
-                                        + requestString.split(" ")[1].split("/")[2].length() 
-                                        + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
+                        // responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
+                        //                 + requestString.split(" ")[1].split("/")[2].length() 
+                        //                 + "\r\n\r\n" + requestString.split(" ")[1].split("/")[2];
+                        reqHeaders.put("Content-Type:", "text/plain");
+                        reqHeaders.put("Content-Length:", String.valueOf(path.split("/")[2].length()));
+                        
+                        responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                                .setReqHashMap(reqHeaders)
+                                                .setBody(path.split("/")[2])
+                                                .build()
+                                                .getResponse();
                     }
-                }else if(requestString.split(" ")[1].equals("/user-agent")){
+                }else if(path.equals("/user-agent")){
                     String userAgent = reqHeaders.get("User-Agent:");
-                    responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
-                                        + userAgent.length()
-                                        + "\r\n\r\n" + userAgent;
-                }else if(requestString.split(" ")[1].startsWith("/file")){
-                    if(requestString.split(" ")[0].equals("GET")){
-                        String fileName = requestString.split(" ")[1].split("/")[2];
+                    // responseString = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " 
+                    //                     + userAgent.length()
+                    //                     + "\r\n\r\n" + userAgent;
+
+                    reqHeaders.put("Content-Type:", "text/plain");
+                    reqHeaders.put("Content-Length:", String.valueOf(userAgent.length()));
+
+                    responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                            .setReqHashMap(reqHeaders)
+                                            .setBody(userAgent)
+                                            .build()
+                                            .getResponse();
+
+                }else if(path.startsWith("/file")){
+                    if(method.equals("GET")){
+                        String fileName = path.split("/")[2];
                         File file = new File(dir, fileName);
                         if(file.exists() && file.isFile()){
         
@@ -92,16 +127,29 @@ public class RequestHandler {
                             while(sc.hasNextLine()){
                                 content += sc.nextLine();
                             }
-                            responseString = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" 
-                                                + file.length() + "\r\n\r\n" + content;
-        
+
+                            reqHeaders.put("Content-Type:", "application/octet-stream");
+                            reqHeaders.put("Content-Length:", String.valueOf(file.length()));
+
+                            // responseString = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" 
+                            //                     + file.length() + "\r\n\r\n" + content;
+                            
+                            responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                                    .setReqHashMap(reqHeaders)
+                                                    .setBody(content)
+                                                    .build()
+                                                    .getResponse();
                             sc.close();
                         }else{
-                            responseString = ResponseText.STATUS_404;
+                            // responseString = ResponseText.STATUS_404;
+                            responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_404)
+                                                    .setReqHashMap(reqHeaders)
+                                                    .build()
+                                                    .getResponse();
                         }
                     }else{
 
-                        String fileName = requestString.split(" ")[1].split("/")[2];
+                        String fileName = path.split("/")[2];
 
                         int length = Integer.parseInt(reqHeaders.get("Content-Length:"));
 
@@ -120,12 +168,21 @@ public class RequestHandler {
                         PrintWriter write = new PrintWriter(file);
                         write.print(String.valueOf(String.valueOf(tempBuff)));
                     
-                        responseString = ResponseText.STATUS_201;
+                        // responseString = ResponseText.STATUS_201;
+
+                        responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_201)
+                                                .setReqHashMap(reqHeaders)
+                                                .build()
+                                                .getResponse();
 
                         write.close();
                     }
                 }else {
-                    responseString = ResponseText.STATUS_404;
+                    // responseString = ResponseText.STATUS_404;
+                    responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_404)
+                                                    .setReqHashMap(reqHeaders)
+                                                    .build()
+                                                    .getResponse();
                 }
 
                 out.write(responseString.getBytes(StandardCharsets.UTF_8));
@@ -140,10 +197,11 @@ public class RequestHandler {
 
                 try{
                     if(reqHeaders.get("Connection:").equalsIgnoreCase("close")){
+                        System.out.println("Connection closed");
                         break;
                     }
                 }catch(NullPointerException e){
-                    
+
                 }
 
             }
