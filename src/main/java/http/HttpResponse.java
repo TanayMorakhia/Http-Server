@@ -29,12 +29,14 @@ public class HttpResponse{
             headers.append("\r\n");
 
             //adding headers to the main response
+            System.out.println(headers.toString());
             sb.append(headers);
         }catch(NullPointerException e){
             sb.append("\r\n");
         }
 
         try{
+            System.out.println(body);
             sb.append(body);
         }catch(NullPointerException e){
 
