@@ -188,10 +188,11 @@ public class RequestHandler {
                 out.write(responseString.getBytes(StandardCharsets.UTF_8));
                 try{
                     if(compressedData.length != 0){
+                        System.out.println("printing inside the try block");
                         out.write(compressedData);
                     }
                 }catch(NullPointerException e){
-                    
+
                 }
                 System.out.println("Response message sent to client");
 
@@ -206,8 +207,6 @@ public class RequestHandler {
                 }
 
             }
-
-            out.flush();
         }catch(IOException e){
             System.out.println(e.getMessage());
         }
