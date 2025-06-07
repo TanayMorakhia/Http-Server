@@ -20,26 +20,33 @@ public class HttpResponse{
     public String getResponse(){
         StringBuilder sb = new StringBuilder();
         sb.append(responseCode);
+        System.out.println(sb.toString());
         
         try{
             StringBuilder headers = new StringBuilder();
             for(Map.Entry<String, String> e : reqHashMap.entrySet()){
                 headers.append(e.getKey() + " " + e.getValue() + "\r\n");
+                System.out.println(sb.toString());
             }
             headers.append("\r\n");
-
+            System.out.println(sb.toString());
+            
             //adding headers to the main response
             sb.append(headers);
+            System.out.println(sb.toString());
         }catch(NullPointerException e){
             sb.append("\r\n");
-        }
-
-        try{
-            sb.append(body);
-        }catch(NullPointerException e){
-
+            System.out.println(sb.toString());
         }
         
+        try{
+            sb.append(body);
+            System.out.println(sb.toString());
+        }catch(NullPointerException e){
+            
+        }
+        
+        System.out.println(sb.toString());
         return sb.toString();
     }
 
