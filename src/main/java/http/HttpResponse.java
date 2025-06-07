@@ -26,10 +26,8 @@ public class HttpResponse{
             StringBuilder headers = new StringBuilder();
             for(Map.Entry<String, String> e : reqHashMap.entrySet()){
                 headers.append(e.getKey() + " " + e.getValue() + "\r\n");
-                System.out.println(sb.toString());
             }
             headers.append("\r\n");
-            System.out.println(sb.toString());
             
             //adding headers to the main response
             sb.append(headers);
@@ -46,7 +44,6 @@ public class HttpResponse{
             
         }
         
-        System.out.println(sb.toString());
         return sb.toString();
     }
 
