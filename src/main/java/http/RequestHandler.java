@@ -189,7 +189,7 @@ public class RequestHandler {
                 out.write(responseString.getBytes(StandardCharsets.UTF_8));
                 try{
                     if(compressedData.length != 0){
-                        System.out.println("printing inside the try block");
+                        System.out.println("printing compressed data");
                         out.write(compressedData);
                     }
                 }catch(NullPointerException e){
