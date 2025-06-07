@@ -198,6 +198,7 @@ public class RequestHandler {
                 try{
                     if(reqHeaders.get("Connection:").equalsIgnoreCase("close")){
                         System.out.println("Connection closed");
+                        clientSocket.close();
                         break;
                     }
                 }catch(NullPointerException e){
