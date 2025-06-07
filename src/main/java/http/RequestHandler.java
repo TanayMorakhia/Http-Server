@@ -173,6 +173,7 @@ public class RequestHandler {
 
                         responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_201)
                                                 .setReqHashMap(reqHeaders)
+                                                .setBody(String.valueOf(tempBuff))
                                                 .build()
                                                 .getResponse();
 
