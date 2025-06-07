@@ -64,6 +64,7 @@ public class RequestHandler {
 
                 if (path.equals("/")) {
                     responseString = new HttpResponse.HttpResponseBuilder(ResponseText.STATUS_OK)
+                                            .setReqHashMap(reqHeaders)
                                             .build()
                                             .getResponse();
                 }else if(path.split("/")[1].equals("echo")){

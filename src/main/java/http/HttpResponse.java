@@ -20,7 +20,6 @@ public class HttpResponse{
     public String getResponse(){
         StringBuilder sb = new StringBuilder();
         sb.append(responseCode);
-        System.out.println(sb.toString());
         
         try{
             StringBuilder headers = new StringBuilder();
@@ -28,20 +27,17 @@ public class HttpResponse{
                 headers.append(e.getKey() + " " + e.getValue() + "\r\n");
             }
             headers.append("\r\n");
-            
+
             //adding headers to the main response
             sb.append(headers);
-            System.out.println(sb.toString());
         }catch(NullPointerException e){
             sb.append("\r\n");
-            System.out.println(sb.toString());
         }
-        
+
         try{
             sb.append(body);
-            System.out.println(sb.toString());
         }catch(NullPointerException e){
-            
+
         }
         
         return sb.toString();
